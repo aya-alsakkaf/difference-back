@@ -12,7 +12,8 @@ const getInventions = async (req, res, next) => {
 const createInvention = async (req, res, next) => {
   try {
     if (req.files) {
-      req.body.images = req.files.map((file) => file.path);
+
+      req.body.images = JSON.parse(req.files).map((file) => file.path);
     }
     const newInvention = await Invention.create(req.body);
     res.status(201).json(newInvention);
