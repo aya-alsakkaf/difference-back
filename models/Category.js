@@ -5,4 +5,4 @@ const CategorySchema = new Schema({
   inventions: [{ type: Schema.Types.ObjectId, ref: 'Invention' }]
 });
 
-module.exports = model('category', CategorySchema);
+module.exports = model('Category', CategorySchema);

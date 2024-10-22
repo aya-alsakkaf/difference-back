@@ -2,22 +2,25 @@ const express = require('express');
 const path = require("path")
 const app = express();
 const connectDb = require('./database');
+const passport = require('passport');
 const morgan = require('morgan');
 const cors = require("cors")
 const notFoundHandler = require('./middleware/notFoundHandler');
 const errorHandler = require('./middleware/errorHandler');
-const userRouter = require("./api/users/users.router")
+const userRouter = require("./api/users/user.router")
 require("dotenv").config()
 connectDb();
 app.use(express.json());
 app.use(cors())
 app.use(morgan("dev"))
 
+app.use(passport.initialize());
+require('./middleware/passport'); // this will instantly initiate the functions inside passport.js
 
 app.use('/api', userRouter);
 
 // use if u want to see images in browser-> localhost:PORT/media/...imgUrl
-// app.use("/media", express.static(path.join(__dirname, "/media")))
+app.use("/media", express.static(path.join(__dirname, "/media")))
 
 app.use(notFoundHandler)
 app.use(errorHandler)

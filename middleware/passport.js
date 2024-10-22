@@ -16,3 +16,16 @@ passport.use(new LocalStrategy({usernameField: "email", passwordField: "password
         done(error)
     }
 }))
+
+passport.use(new JwtStrategy({jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: process.env.JWT_SECRET}, async(payload, done)=>{
+console.log("passport ok")
+
+    try {
+
+        const user = await User.findById(payload._id)
+        if(!user) return done(null, false, {message: "User not found"})
+        return done(null, user)
+    } catch (error) {
+        done(error)
+    }
+}))

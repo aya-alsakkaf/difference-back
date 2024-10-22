@@ -8,4 +8,4 @@ const OrderSchema = new Schema({
     investor: { type: Schema.Types.ObjectId, ref: 'User' }
   });
 
-module.exports = model('order', OrderSchema);
+module.exports = model('Order', OrderSchema);

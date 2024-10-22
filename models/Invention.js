@@ -11,5 +11,5 @@ inventors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   category: { type: Schema.Types.ObjectId, ref: 'Category' }
 });
 
-module.exports = mongoose.model('invention', InventionSchema);
+module.exports = mongoose.model('Invention', InventionSchema);
 
