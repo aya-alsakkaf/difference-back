@@ -5,7 +5,7 @@ const InventionSchema = new Schema({
   inventors: [{ type: Schema.Types.ObjectId, ref: "User" }],
   name: { type: String, required: true },
   description: { type: String, required: true },
-  image: { type: String },
+  images: [{ type: String }],
   price: { type: String, required: true },
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   category: { type: Schema.Types.ObjectId, ref: "Category" },
