@@ -9,6 +9,7 @@ const notFoundHandler = require('./middleware/notFoundHandler');
 const errorHandler = require('./middleware/errorHandler');
 const userRouter = require("./api/users/user.router")
 const inventionRouter = require("./api/inventions/inventions.router")
+const orderRouter = require("./api/orders/orders.routes")
 require("dotenv").config()
 connectDb();
 app.use(express.json());
@@ -21,6 +22,7 @@ require('./middleware/passport'); // this will instantly initiate the functions 
 
 app.use('/api', userRouter);
 app.use('/api/inventions', inventionRouter);
+app.use('/api/orders', orderRouter);
 // use if u want to see images in browser-> localhost:PORT/media/...imgUrl
 app.use("/media", express.static(path.join(__dirname, "/media")))
 //////////////////////////////////////////////////////////// middleware

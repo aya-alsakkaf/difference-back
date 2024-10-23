@@ -9,6 +9,15 @@ const getInventions = async (req, res, next) => {
   }
 };
 
+const getInvention = async (req, res, next) => {
+  try {
+    const invention = await Invention.findById(req.params.id);
+    res.status(200).json(invention);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createInvention = async (req, res, next) => {
   try {
     if (req.files && req.files.length > 0) {
@@ -66,6 +75,7 @@ const deleteInvention = async (req, res, next) => {
 
 module.exports = {
   getInventions,
+  getInvention,
   createInvention,
   updateInvention,
   deleteInvention,
