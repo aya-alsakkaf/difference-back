@@ -12,7 +12,8 @@ const InventionSchema = new Schema({
   },
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
-  cost: { type: String, required: true },
+  cost: { type: Number, required: true },
+  shares: { type: Number, required: true },
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
