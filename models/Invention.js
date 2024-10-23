@@ -3,7 +3,7 @@ const Capitalise = require("../utils/Capitalise");
 const Schema = mongoose.Schema;
 
 const InventionSchema = new Schema({
-  inventors: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  inventors: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   name: {
     type: String,
     required: true,
@@ -13,7 +13,6 @@ const InventionSchema = new Schema({
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
   cost: { type: Number, required: true },
-  shares: { type: Number, required: true },
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   category: { type: Schema.Types.ObjectId, ref: "Category" },
 });
