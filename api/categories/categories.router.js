@@ -5,8 +5,12 @@ const {
   getOneCategory,
 } = require("./categories.controllers");
 
-categoryRouter.get("/categories", getCategories);
-categoryRouter.post("/categories", createCategory);
-categoryRouter.get("/categories/:id", getOneCategory);
+categoryRouter.get("/", getCategories);
+categoryRouter.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  createCategory
+);
+categoryRouter.get("/:id", getOneCategory);
 
 module.exports = categoryRouter;
