@@ -9,7 +9,8 @@ const notFoundHandler = require('./middleware/notFoundHandler');
 const errorHandler = require('./middleware/errorHandler');
 const userRouter = require("./api/users/user.router")
 const inventionRouter = require("./api/inventions/inventions.router")
-const orderRouter = require("./api/orders/orders.routes")
+const orderRouter = const categoryRouter = require("./api/categories/categories.router");
+require("./api/orders/orders.routes")
 require("dotenv").config()
 connectDb();
 app.use(express.json());
@@ -17,15 +18,11 @@ app.use(cors())
 app.use(morgan("dev"))
 
 app.use(passport.initialize());
-require('./middleware/passport'); // this will instantly initiate the functions inside passport.js
-//////////////////////////////////////////////////////////// routers
-
-app.use('/api', userRouter);
-app.use('/api/inventions', inventionRouter);
-app.use('/api/orders', orderRouter);
-// use if u want to see images in browser-> localhost:PORT/media/...imgUrl
+require('./middleware/passport'); 
+app.use("/api", userRouter);
+app.use("/api", inventionRouter);
+app.use("/api", categoryRouter);
 app.use("/media", express.static(path.join(__dirname, "/media")))
-//////////////////////////////////////////////////////////// middleware
 app.use(notFoundHandler)
 app.use(errorHandler)
 
