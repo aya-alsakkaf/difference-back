@@ -11,7 +11,7 @@ const passport = require("passport");
 router.get("/users", getUsers);
 router.get("/users/:id", getUser);
 router.get(
-  "/profile",
+  "/auth/profile",
   passport.authenticate("jwt", { session: false }),
   getProfile
 );
