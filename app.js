@@ -18,14 +18,11 @@ app.use(cors())
 app.use(morgan("dev"))
 
 app.use(passport.initialize());
-require('./middleware/passport'); // this will instantly initiate the functions inside passport.js
-//////////////////////////////////////////////////////////// routers
-
+require('./middleware/passport'); 
 app.use("/api", userRouter);
 app.use("/api", inventionRouter);
-// use if u want to see images in browser-> localhost:PORT/media/...imgUrl
+app.use("/api", categoryRouter);
 app.use("/media", express.static(path.join(__dirname, "/media")))
-//////////////////////////////////////////////////////////// middleware
 app.use(notFoundHandler)
 app.use(errorHandler)
 
