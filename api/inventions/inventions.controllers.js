@@ -1,5 +1,5 @@
 const Invention = require("../../models/Invention");
-
+const User = require("../../models/User");
 const getInventions = async (req, res, next) => {
   try {
     const inventions = await Invention.find();
@@ -24,6 +24,7 @@ const createInvention = async (req, res, next) => {
       req.body.images = req.files.map((file) => file.path);
     }
     const newInvention = await Invention.create(req.body);
+    await User.findByIdAndUpdate(req.user._id, { $push: { inventions: newInvention._id } });
     res.status(201).json(newInvention);
   } catch (error) {
     next(error);
