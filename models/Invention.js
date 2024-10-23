@@ -4,7 +4,12 @@ const Schema = mongoose.Schema;
 
 const InventionSchema = new Schema({
   inventors: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  name: { type: String, required: true, unique: true, set: v=> Capitalise(v) },
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    set: (v) => Capitalise(v),
+  },
   description: { type: String, required: true },
   images: [{ type: String, required: true }],
   cost: { type: String, required: true },

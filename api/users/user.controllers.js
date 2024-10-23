@@ -13,7 +13,8 @@ const createToken = (user) => {
 const register = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = req.file.path;
+      console.log(req.file);
+      req.body.image = req.file.path.replace("\\", "/");
     }
     const { password } = req.body;
     req.body.password = await bcrypt.hash(password, 10);
