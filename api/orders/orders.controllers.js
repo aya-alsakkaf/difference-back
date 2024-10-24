@@ -19,9 +19,13 @@ const getOrder = async (req, res, next) => {
 
 const createOrder = async (req, res, next) => {
     try {
-        const order = await Order.create(req.body);
-        await User.findByIdAndUpdate(req.user._id, { $push: { investments: order._id } });
-        res.status(201).json(order);
+        if (req.user.role === "admin" || req.user.role === "investor") {
+            const order = await Order.create(req.body);
+            await User.findByIdAndUpdate(req.user._id, { $push: { investments: order._id } });
+            res.status(201).json(order);
+        } else {
+            res.status(401).json({ message: "Unauthorized" });
+        }
     } catch (error) {
         next(error)
     }
