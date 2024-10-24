@@ -16,8 +16,13 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   getProfile
 );
-router.put("/auth/profile", passport.authenticate("jwt", { session: false }), updateProfile);
 router.post("/auth/register", upload.single("image"), register);
+router.put(
+  "/auth/profile",
+  upload.single("image"),
+  passport.authenticate("jwt", { session: false }),
+  updateProfile
+);
 router.post("/auth/login", login);
 
 module.exports = router;
