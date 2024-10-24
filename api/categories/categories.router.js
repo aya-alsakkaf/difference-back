@@ -1,3 +1,4 @@
+const passport = require("passport");
 const categoryRouter = require("express").Router();
 const {
   getCategories,
