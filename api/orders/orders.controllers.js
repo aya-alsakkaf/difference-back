@@ -1,5 +1,6 @@
 const Order = require("../../models/Order");
 const User = require("../../models/User");
+const Invention = require("../../models/Invention");
 const getOrders = async (req, res, next) => {
     try {
         const orders = await Order.find().populate("invention").populate("investor");
@@ -20,8 +21,9 @@ const getOrder = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
     try {
         if (req.user.role === "admin" || req.user.role === "investor") {
-            const order = await Order.create(req.body);
+            const order = await Order.create({ ...req.body, investor: req.user._id }); // percentage will be calculated in the frontend to only except Z numbers (no decimals)
             await User.findByIdAndUpdate(req.user._id, { $push: { investments: order._id } });
+            await Invention.findByIdAndUpdate(req.params.inventionId, { $push: { orders: order._id } });
             res.status(201).json(order);
         } else {
             res.status(401).json({ message: "Unauthorized" });
@@ -50,7 +52,6 @@ const deleteOrder = async (req, res, next) => {
         const order = await Order.findById(req.params.id);
         if (req.user._id.equals(order.investor) || req.user.role === "admin") {
             const deletedOrder = await Order.findByIdAndDelete(req.params.id);
-            // await User.findByIdAndUpdate(req.user._id, { $pull: { investments: deletedOrder._id } });
             res.status(200).json(deletedOrder);
         } else {
             res.status(401).json({ message: "Unauthorized" });

@@ -2,7 +2,7 @@ const Invention = require("../../models/Invention");
 const User = require("../../models/User");
 const getInventions = async (req, res, next) => {
   try {
-    const inventions = await Invention.find();
+    const inventions = await Invention.find().populate("inventors").populate("orders");
     res.status(200).json(inventions);
   } catch (error) {
     next(error);
@@ -11,7 +11,7 @@ const getInventions = async (req, res, next) => {
 
 const getInvention = async (req, res, next) => {
   try {
-    const invention = await Invention.findById(req.params.id);
+    const invention = await Invention.findById(req.params.id).populate("inventors").populate("orders");
     res.status(200).json(invention);
   } catch (error) {
     next(error);
