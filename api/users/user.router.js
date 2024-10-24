@@ -5,6 +5,7 @@ const {
   getUsers,
   getUser,
   getProfile,
+  updateProfile,
 } = require("./user.controllers");
 const upload = require("../../middleware/multer");
 const passport = require("passport");
@@ -15,6 +16,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   getProfile
 );
+router.put("/auth/profile", passport.authenticate("jwt", { session: false }), updateProfile);
 router.post("/auth/register", upload.single("image"), register);
 router.post("/auth/login", login);
 
