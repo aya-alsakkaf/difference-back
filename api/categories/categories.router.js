@@ -5,7 +5,6 @@ const {
   createCategory,
   getOneCategory,
 } = require("./categories.controllers");
-const passport = require("passport");
 categoryRouter.get("/", getCategories);
 categoryRouter.post(
   "/",
