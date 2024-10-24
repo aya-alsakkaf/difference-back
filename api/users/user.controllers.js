@@ -64,18 +64,26 @@ const getProfile = async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-
     next(error);
   }
 };
 
 const updateProfile = async (req, res, next) => {
-    try {
-        const user = await User.findByIdAndUpdate(req.user._id, req.body, { new: true });
-        res.status(200).json(user);
-    } catch (error) {
-        next(error);
-    }
-}
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
 
-module.exports = { register, login, getUsers, getUser, getProfile, updateProfile };
+module.exports = {
+  register,
+  login,
+  getUsers,
+  getUser,
+  getProfile,
+  updateProfile,
+};

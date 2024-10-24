@@ -18,13 +18,24 @@ const getInvention = async (req, res, next) => {
   }
 };
 
+const getInventionsByUser = async (req, res, next) => {
+  try {
+    const inventions = await Invention.find({ inventors: req.params.id });
+    res.status(200).json(inventions);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createInvention = async (req, res, next) => {
   try {
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
     const newInvention = await Invention.create(req.body);
-    await User.findByIdAndUpdate(req.user._id, { $push: { inventions: newInvention._id } });
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { inventions: newInvention._id },
+    });
     res.status(201).json(newInvention);
   } catch (error) {
     next(error);
@@ -80,4 +91,5 @@ module.exports = {
   createInvention,
   updateInvention,
   deleteInvention,
+  getInventionsByUser,
 };
