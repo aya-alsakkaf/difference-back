@@ -71,8 +71,9 @@ const getProfile = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
   try {
     if(req.file) {
-      req.body.image = req.file.path.replace("\\", "/");
+      req.body.image = await req.file.path.replace("\\", "/");
     }
+    console.log(req.body);
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     });
