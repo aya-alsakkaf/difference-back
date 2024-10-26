@@ -3,7 +3,7 @@ const User = require("../../models/User");
 const Invention = require("../../models/Invention");
 const getOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find().populate("invention").populate("investor");
+        const orders = await Order.find().populate("invention").populate("investor", "-password");
         res.status(200).json(orders);
     } catch (error) {
         next(error)
@@ -11,7 +11,7 @@ const getOrders = async (req, res, next) => {
 }
 const getOrder = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.id).populate("invention").populate("investor");
+        const order = await Order.findById(req.params.id).populate("invention").populate("investor", "-password");
         res.status(200).json(order);
     } catch (error) {
         next(error)
