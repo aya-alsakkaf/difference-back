@@ -4,10 +4,11 @@ const ExtractJwt = require("passport-jwt").ExtractJwt
 const LocalStrategy = require("passport-local").Strategy
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
-
-passport.use(new LocalStrategy({usernameField: "email", passwordField: "password"}, async(email, password, done)=>{
+require("dotenv").config();
+const localStrategy = new LocalStrategy({usernameField: "email", passwordField: "password"}, async(email, password, done)=>{
     try {
         const user = await User.findOne({email})
+        console.log(user)
         if(!user) return done(null, false, {message: "Email not found"})
         const isMatch = await bcrypt.compare(password, user.password)
         if(!isMatch) return done(null, false, {message: "Password is incorrect"})
@@ -15,10 +16,12 @@ passport.use(new LocalStrategy({usernameField: "email", passwordField: "password
     } catch (error) {
         done(error)
     }
-}))
-
-passport.use(new JwtStrategy({jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: process.env.JWT_SECRET}, async(payload, done)=>{
-console.log("passport ok")
+})
+const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.JWT_SECRET
+  }
+const jwtStrategy = new JwtStrategy(jwtOptions, async(payload, done)=>{
 
     try {
 
@@ -28,4 +31,6 @@ console.log("passport ok")
     } catch (error) {
         done(error)
     }
-}))
+})
+
+module.exports = {localStrategy, jwtStrategy}

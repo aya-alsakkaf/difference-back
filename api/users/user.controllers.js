@@ -27,8 +27,9 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
+  console.log("dada")
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.user.email });
     const token = createToken(user);
     res.status(200).json({ token, message: "Logged in successfully!" });
   } catch (error) {

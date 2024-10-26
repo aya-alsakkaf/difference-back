@@ -11,15 +11,17 @@ const userRouter = require("./api/users/user.router");
 const inventionRouter = require("./api/inventions/inventions.router");
 const orderRouter = require("./api/orders/orders.routes");
 const categoryRouter = require("./api/categories/categories.router");
+const {localStrategy, jwtStrategy} = require("./middleware/passport");
 
 require("dotenv").config();
 connectDb();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
-
 app.use(passport.initialize());
-require("./middleware/passport");
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 app.use("/api", userRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/inventions", inventionRouter);
