@@ -32,7 +32,11 @@ const createInvention = async (req, res, next) => {
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
-    const newInvention = await Invention.create(req.body);
+
+    const inventors = req.body.inventors ? [req.user._id, ...req.body.inventors] : req.user._id
+    // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference) 
+    console.log(inventors)
+    const newInvention = await Invention.create({...req.body, inventors});
     await User.findByIdAndUpdate(req.user._id, {
       $push: { inventions: newInvention._id },
     });

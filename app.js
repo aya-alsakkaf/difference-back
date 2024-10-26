@@ -7,10 +7,11 @@ const morgan = require("morgan");
 const cors = require("cors");
 const notFoundHandler = require("./middleware/notFoundHandler");
 const errorHandler = require("./middleware/errorHandler");
-const userRouter = require("./api/users/user.router");
 const inventionRouter = require("./api/inventions/inventions.router");
 const orderRouter = require("./api/orders/orders.routes");
 const categoryRouter = require("./api/categories/categories.router");
+const userRouter = require("./api/users/user.router");
+
 const {localStrategy, jwtStrategy} = require("./middleware/passport");
 
 require("dotenv").config();

@@ -21,7 +21,7 @@ const getOrder = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
     try {
         if (req.user.role === "admin" || req.user.role === "investor") {
-            const order = await Order.create({ ...req.body, investor: req.user._id }); // percentage will be calculated in the frontend to only except Z numbers (no decimals)
+            const order = await Order.create({ ...req.body, investor: req.user._id, invention: req.params.inventionId }); // percentage will be calculated in the frontend to only except Z numbers (no decimals)
             await User.findByIdAndUpdate(req.user._id, { $push: { investments: order._id } });
             await Invention.findByIdAndUpdate(req.params.inventionId, { $push: { orders: order._id } });
             res.status(201).json(order);
