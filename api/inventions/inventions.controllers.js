@@ -2,7 +2,9 @@ const Invention = require("../../models/Invention");
 const User = require("../../models/User");
 const getInventions = async (req, res, next) => {
   try {
-    const inventions = await Invention.find().populate("inventors").populate("orders");
+    const inventions = await Invention.find()
+      .populate("inventors")
+      .populate("orders");
     res.status(200).json(inventions);
   } catch (error) {
     next(error);
@@ -11,16 +13,22 @@ const getInventions = async (req, res, next) => {
 
 const getInvention = async (req, res, next) => {
   try {
-    const invention = await Invention.findById(req.params.id).populate("inventors").populate("orders");
+    console.log("first");
+    const invention = await Invention.findById(req.params.id)
+      .populate("inventors")
+      .populate("orders");
     res.status(200).json(invention);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
 
 const getInventionsByUser = async (req, res, next) => {
   try {
-    const inventions = await Invention.find({ inventors: req.params.id });
+    const inventions = await Invention.find({ inventors: req.params.id })
+      .populate("inventors")
+      .populate("orders");
     res.status(200).json(inventions);
   } catch (error) {
     next(error);
@@ -33,10 +41,12 @@ const createInvention = async (req, res, next) => {
       req.body.images = req.files.map((file) => file.path);
     }
 
-    const inventors = req.body.inventors ? [req.user._id, ...req.body.inventors] : req.user._id
-    // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference) 
-    console.log(inventors)
-    const newInvention = await Invention.create({...req.body, inventors});
+    const inventors = req.body.inventors
+      ? [req.user._id, ...req.body.inventors]
+      : req.user._id;
+    // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
+    console.log(inventors);
+    const newInvention = await Invention.create({ ...req.body, inventors });
     await User.findByIdAndUpdate(req.user._id, {
       $push: { inventions: newInvention._id },
     });
