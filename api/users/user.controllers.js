@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  console.log("dada")
+  console.log("dada");
   try {
     const user = await User.findOne({ email: req.body.email });
     const token = createToken(user);
@@ -71,7 +71,7 @@ const getProfile = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    if(req.file) {
+    if (req.file) {
       req.body.image = await req.file.path.replace("\\", "/");
     }
     console.log(req.body);

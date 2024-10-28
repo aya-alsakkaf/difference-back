@@ -19,10 +19,10 @@ app.use(morgan("dev"));
 
 app.use(passport.initialize());
 require("./middleware/passport");
-app.use("/api", userRouter);
-app.use("/api", inventionRouter);
-app.use("/api", categoryRouter);
-app.use("/api", orderRouter);
+app.use("/api/users", userRouter);
+app.use("/api/inventions", inventionRouter);
+app.use("/api/categories", categoryRouter);
+app.use("/api/orders", orderRouter);
 app.use("/media", express.static(path.join(__dirname, "/media")));
 app.use(notFoundHandler);
 app.use(errorHandler);
