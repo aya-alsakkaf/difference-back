@@ -20,7 +20,12 @@ const register = async (req, res, next) => {
     req.body.password = await bcrypt.hash(password, 10);
     const user = await User.create(req.body);
     const token = createToken(user);
-    res.status(201).json({ token, message: "Account created successfully!" });
+    res.status(201).json({
+      token,
+      message: "Account created successfully!",
+      _id: user._id,
+      role: user.role,
+    });
   } catch (error) {
     next(error);
   }
@@ -31,7 +36,12 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     const token = createToken(user);
-    res.status(200).json({ token, message: "Logged in successfully!" });
+    res.status(200).json({
+      token,
+      message: "Logged in successfully!",
+      _id: user._id,
+      role: user.role,
+    });
   } catch (error) {
     next(error);
   }
