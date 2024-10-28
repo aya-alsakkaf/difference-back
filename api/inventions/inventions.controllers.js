@@ -132,6 +132,7 @@ const toggleLikeInvention = async (req, res, next) => {
 
 const toggleInterestedInvention = async (req, res, next) => {
   try {
+    if(req.user.role !== "investor" && req.user.role !== "admin") return res.status(403).json({message: "For investors only"})
     const invention = await Invention.findById(req.params.id);
     if (invention) {
       let message = ""
