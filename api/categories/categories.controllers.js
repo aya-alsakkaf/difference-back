@@ -13,11 +13,11 @@ module.exports = { getCategories };
 
 const createCategory = async (req, res, next) => {
   try {
-    if(req.user.role === "admin") {
+    if (req.user.role === "admin") {
       const category = await Category.create(req.body);
-    res.status(201).json(category);
-  } else {
-    res.status(403).json({ message: "Unauthorized" });
+      res.status(201).json(category);
+    } else {
+      res.status(403).json({ message: "Unauthorized" });
     }
   } catch (error) {
     next(error);
