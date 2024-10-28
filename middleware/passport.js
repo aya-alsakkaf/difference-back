@@ -22,9 +22,9 @@ const jwtOptions = {
     secretOrKey: process.env.JWT_SECRET
   }
 const jwtStrategy = new JwtStrategy(jwtOptions, async(payload, done)=>{
+    console.log("first")
 
     try {
-
         const user = await User.findById(payload._id)
         if(!user) return done(null, false, {message: "User not found"})
         return done(null, user)
