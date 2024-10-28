@@ -99,6 +99,68 @@ const deleteInvention = async (req, res, next) => {
   }
 };
 
+const toggleLikeInvention = async (req, res, next) => {
+  try {
+    const invention = await Invention.findById(req.params.id);
+    if (invention) {
+      let message = ""
+      const user = await User.findById(req.user._id);
+      if (user) {
+        const isLiked = invention.likes.includes(user._id);
+        if (isLiked) {
+          invention.likes = invention.likes.filter((id) => !id.equals(user._id));
+          user.liked = user.liked.filter((id) => !id.equals(invention._id));
+          message = "Invention unliked"
+        } else {
+          invention.likes.push(user._id);
+          user.liked.push(invention._id);
+          message = "Invention liked"
+        }
+        await invention.save();
+        await user.save();
+        return res.status(200).json({ message, invention });
+      } else {
+        return res.status(404).json({ message: "User not found", invention: invention });
+      }
+    } else {
+      return res.status(404).json({ message: "Invention not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const toggleInterestedInvention = async (req, res, next) => {
+  try {
+    const invention = await Invention.findById(req.params.id);
+    if (invention) {
+      let message = ""
+      const user = await User.findById(req.user._id);
+      if (user) {
+        const isIntrested = invention.intrestedInventors.includes(user._id);
+        if (isIntrested) {
+          invention.intrestedInventors = invention.intrestedInventors.filter((id) => !id.equals(user._id));
+          user.intrests = user.intrests.filter((id) => !id.equals(invention._id));
+          message = "Invention removed from interests"
+        } else {
+          invention.intrestedInventors.push(user._id);
+          user.intrests.push(invention._id);
+          message = "Invention added to interests"
+        }
+        await invention.save();
+        await user.save();
+        return res.status(200).json({ message, invention });
+      } else {
+        return res.status(404).json({ message: "User not found", invention: invention });
+      }
+    } else {
+      return res.status(404).json({ message: "Invention not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   getInventions,
   getInvention,
@@ -106,4 +168,6 @@ module.exports = {
   updateInvention,
   deleteInvention,
   getInventionsByUser,
+  toggleLikeInvention,
+  toggleInterestedInvention
 };

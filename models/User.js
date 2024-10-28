@@ -10,6 +10,8 @@ const UserSchema = new Schema({
   image: { type: String }, // will make it required for inventor and investor in frontend (becuase we dont want to require the guest/enthusiast to upload an image)
   inventions: [{ type: Schema.Types.ObjectId, ref: "Invention" }],
   investments: [{ type: Schema.Types.ObjectId, ref: "Order" }],
+  liked: [{ type: Schema.Types.ObjectId, ref: "Invention" }],
+  intrests: [{ type: Schema.Types.ObjectId, ref: "Invention" }],
 });
 
 module.exports = model("User", UserSchema);

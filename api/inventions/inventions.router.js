@@ -1,4 +1,4 @@
-const inventionRouter = require("express").Router();
+const router = require("express").Router();
 const {
   getInventions,
   getInvention,
@@ -6,27 +6,40 @@ const {
   updateInvention,
   deleteInvention,
   getInventionsByUser,
+  toggleLikeInvention,
+  toggleInterestedInvention,
 } = require("./inventions.controllers");
 const upload = require("../../middleware/multer");
 const passport = require("passport");
-inventionRouter.get("/", getInventions);
-inventionRouter.get("/:id", getInvention);
-inventionRouter.post(
+router.get("/", getInventions);
+router.get("/:id", getInvention);
+router.post(
   "/",
   upload.array("images", 30),
   passport.authenticate("jwt", { session: false }),
   createInvention
 );
-inventionRouter.put(
+router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   updateInvention
 );
-inventionRouter.delete(
+router.delete(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   deleteInvention
 );
-inventionRouter.get("/user/:id", getInventionsByUser);
+router.get("/user/:id", getInventionsByUser); // hassan do this make it /:userId only
 
-module.exports = inventionRouter;
+router.put(
+  "/:id/like",
+  passport.authenticate("jwt", { session: false }),
+  toggleLikeInvention
+);
+router.put(
+  "/:id/interested",
+  passport.authenticate("jwt", { session: false }),
+  toggleInterestedInvention
+);
+
+module.exports = router;

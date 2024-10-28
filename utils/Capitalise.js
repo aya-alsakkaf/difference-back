@@ -11,3 +11,4 @@ module.exports = function Capitalise(v) {
         return char.toLowerCase()
     }).join('')
 }
+
