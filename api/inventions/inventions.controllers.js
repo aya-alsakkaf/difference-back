@@ -50,15 +50,16 @@ const getInventionById = async (req, res, next) => {
 const createInvention = async (req, res, next) => {
   try {
     // req.body.inventors = JSON.parse(req.body.inventors);
-
-    console.log("inventors", req.body.inventors.split(","));
+    
+    console.log("inventors", req.body.inventors?.split(","));
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
-    const inventorIds = req.body.inventors.split(",").map((id) => {
+    const inventorIds = req.body.inventors?.split(",").map((id) => {
       return new mongoose.Types.ObjectId(id.trim());
-    });
+    }) || [];
     req.body.inventors = [req.user._id, ...inventorIds];
+    console.log("req.body", req.body)
     const inventionData  = {
       ...req.body,
       inventors: [req.user._id, ...inventorIds],
