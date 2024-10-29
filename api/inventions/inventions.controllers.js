@@ -48,10 +48,7 @@ const createInvention = async (req, res, next) => {
     const inventorIds = req.body.inventors.split(",").map(id =>{ 
       return new mongoose.Types.ObjectId(id.trim())
     });
-    console.log(inventorIds);
     req.body.inventors = [req.user._id, ...inventorIds];
-    // const inventors =  [req.user._id, ...req.body.inventors.split(",")]
-    console.log(req.body.inventors);
     const inventionData  = {
       ...req.body,
       inventors: [req.user._id, ...inventorIds]
@@ -74,25 +71,45 @@ const createInvention = async (req, res, next) => {
 
 const updateInvention = async (req, res, next) => {
   try {
-
-    const updatedInvention = await Invention.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body, inventors: req.body.inventors }
-    );
-    res.status(200).json(updatedInvention);
-
     const user = req.user;
     const invention = await Invention.findById(req.params.id);
+    
+    if (!invention) {
+      return res.status(404).json({ message: "Invention not found" });
+    }
+
     if (invention.inventors.includes(user._id) || user.role === "admin") {
+      let updateData = { ...req.body };
+      
+      
+      // Handle new images if uploaded
+      if (req.files && req.files.length > 0) {
+        updateData.images = await req.files.map(file => file.path.replace("\\", "/"));
+      }
+      
+      // Handle inventors
+      // if (req.body.inventors) {
+      //   const inventorIds = req.body.inventors.split(",").map(id => 
+      //     new mongoose.Types.ObjectId(id.trim())
+      //   );
+      //   updateData.inventors = [req.user._id, ...inventorIds];
+      // }
+      
+      // Convert cost to number
+      if (updateData.cost) {
+        updateData.cost = Number(updateData.cost);
+      }
+      console.log(updateData)
+
       const updatedInvention = await Invention.findByIdAndUpdate(
         req.params.id,
-        req.body
+        updateData,
+        { new: true }
       );
-      res.status(200).json(updatedInvention);
+
+      return res.status(200).json(updatedInvention);
     } else {
-      res
-        .status(403)
-        .json({ message: "You are not the inventor of this invention" });
+      return res.status(403).json({ message: "You are not authorized to update this invention" });
     }
   } catch (error) {
     next(error);
@@ -103,7 +120,7 @@ const deleteInvention = async (req, res, next) => {
   try {
     const user = req.user;
     const invention = await Invention.findById(req.params.id);
-    if (invention.inventors.includes(user._id) || user.role === "admin") {
+    if (invention.inventors.includes(usser._id) || user.role === "admin") {
       const deletedInvention = await Invention.findByIdAndDelete(req.params.id);
       res.status(200).json(deletedInvention);
     } else {

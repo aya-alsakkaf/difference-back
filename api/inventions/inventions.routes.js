@@ -21,6 +21,7 @@ router.post(
 );
 router.put(
   "/:id",
+  upload.array("images", 30),
   passport.authenticate("jwt", { session: false }),
   updateInvention
 );
