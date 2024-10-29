@@ -8,11 +8,13 @@ const {
   getInventionsByUser,
   toggleLikeInvention,
   toggleInterestedInvention,
+  getInventionById,
 } = require("./inventions.controllers");
 const upload = require("../../middleware/multer");
 const passport = require("passport");
 router.get("/", getInventions);
 router.get("/:id", getInvention);
+router.get("/:id", getInventionById);
 router.post(
   "/",
   upload.array("images", 30),

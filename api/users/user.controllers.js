@@ -75,7 +75,16 @@ const getProfile = async (req, res, next) => {
 
     res.status(200).json(user);
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    next(error);
+  }
+};
+
+const getProfileById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).populate("inventions");
+    res.status(200).json(user);
+  } catch (error) {
     next(error);
   }
 };
@@ -102,4 +111,5 @@ module.exports = {
   getUser,
   getProfile,
   updateProfile,
+  getProfileById,
 };

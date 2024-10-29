@@ -36,25 +36,35 @@ const getInventionsByUser = async (req, res, next) => {
     next(error);
   }
 };
+const getInventionById = async (req, res, next) => {
+  try {
+    const invention = await Invention.findById(req.params.id)
+      .populate("inventors")
+      .populate("orders");
+    res.status(200).json(invention);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const createInvention = async (req, res, next) => {
   try {
     // req.body.inventors = JSON.parse(req.body.inventors);
-    
-    console.log("inventors", req.body.inventors.split(","))
+
+    console.log("inventors", req.body.inventors.split(","));
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
-    const inventorIds = req.body.inventors.split(",").map(id =>{ 
-      return new mongoose.Types.ObjectId(id.trim())
+    const inventorIds = req.body.inventors.split(",").map((id) => {
+      return new mongoose.Types.ObjectId(id.trim());
     });
     console.log(inventorIds);
     req.body.inventors = [req.user._id, ...inventorIds];
     // const inventors =  [req.user._id, ...req.body.inventors.split(",")]
     console.log(req.body.inventors);
-    const inventionData  = {
+    const inventionData = {
       ...req.body,
-      inventors: [req.user._id, ...inventorIds]
+      inventors: [req.user._id, ...inventorIds],
     };
     console.log(inventionData);
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
@@ -74,11 +84,10 @@ const createInvention = async (req, res, next) => {
 
 const updateInvention = async (req, res, next) => {
   try {
-
-    const updatedInvention = await Invention.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body, inventors: req.body.inventors }
-    );
+    const updatedInvention = await Invention.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+      inventors: req.body.inventors,
+    });
     res.status(200).json(updatedInvention);
 
     const user = req.user;
@@ -199,4 +208,5 @@ module.exports = {
   getInventionsByUser,
   toggleLikeInvention,
   toggleInterestedInvention,
+  getInventionById,
 };
