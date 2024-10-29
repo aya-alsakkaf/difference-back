@@ -15,7 +15,7 @@ const InventionSchema = new Schema({
   cost: { type: Number, required: true },
   phase: { type: String, default: "idea" },
   orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
-  category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  category: { type: Schema.Types.ObjectId, ref: "Category" },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   intrestedInvestors: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });

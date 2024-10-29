@@ -1,6 +1,7 @@
 const Category = require("../../models/Category");
 const Invention = require("../../models/Invention");
 const User = require("../../models/User");
+const mongoose = require("mongoose");
 const getInventions = async (req, res, next) => {
   try {
     const inventions = await Invention.find()
@@ -38,16 +39,27 @@ const getInventionsByUser = async (req, res, next) => {
 
 const createInvention = async (req, res, next) => {
   try {
+    // req.body.inventors = JSON.parse(req.body.inventors);
+    
+    console.log("inventors", req.body.inventors.split(","))
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
-
-    const inventors = req.body.inventors
-      ? [req.user._id, ...req.body.inventors]
-      : req.user._id;
+    const inventorIds = req.body.inventors.split(",").map(id =>{ 
+      return new mongoose.Types.ObjectId(id.trim())
+    });
+    console.log(inventorIds);
+    req.body.inventors = [req.user._id, ...inventorIds];
+    // const inventors =  [req.user._id, ...req.body.inventors.split(",")]
+    console.log(req.body.inventors);
+    const inventionData  = {
+      ...req.body,
+      inventors: [req.user._id, ...inventorIds]
+    };
+    console.log(inventionData);
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
-    console.log(inventors);
-    const newInvention = await Invention.create({ ...req.body, inventors });
+    const newInvention = await Invention.create(inventionData);
+    console.log(newInvention);
     await Category.findByIdAndUpdate(req.body.category, {
       $push: { inventions: newInvention._id },
     });
@@ -62,9 +74,10 @@ const createInvention = async (req, res, next) => {
 
 const updateInvention = async (req, res, next) => {
   try {
+
     const updatedInvention = await Invention.findByIdAndUpdate(
       req.params.id,
-      req.body
+      { ...req.body, inventors: req.body.inventors }
     );
     res.status(200).json(updatedInvention);
 
