@@ -36,7 +36,7 @@ const login = async (req, res, next) => {
   console.log("dada");
   try {
     const user = await User.findOne({ email: req.body.email });
-    const token = createToken({...user, role: user.role});
+    const token = createToken(user);
     res.status(200).json({
       token,
       message: "Logged in successfully!",
