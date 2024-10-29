@@ -1,3 +1,4 @@
+const Category = require("../../models/Category");
 const Invention = require("../../models/Invention");
 const User = require("../../models/User");
 const getInventions = async (req, res, next) => {
@@ -47,6 +48,9 @@ const createInvention = async (req, res, next) => {
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
     console.log(inventors);
     const newInvention = await Invention.create({ ...req.body, inventors });
+    await Category.findByIdAndUpdate(req.body.category, {
+      $push: { inventions: newInvention._id },
+    });
     await User.findByIdAndUpdate(req.user._id, {
       $push: { inventions: newInvention._id },
     });
@@ -143,9 +147,9 @@ const toggleInterestedInvention = async (req, res, next) => {
       let message = "";
       const user = await User.findById(req.user._id);
       if (user) {
-        const isIntrested = invention.intrestedInventors.includes(user._id);
+        const isIntrested = invention.intrestedInvestors.includes(user._id);
         if (isIntrested) {
-          invention.intrestedInventors = invention.intrestedInventors.filter(
+          invention.intrestedInvestors = invention.intrestedInvestors.filter(
             (id) => !id.equals(user._id)
           );
           user.intrests = user.intrests.filter(
@@ -153,7 +157,7 @@ const toggleInterestedInvention = async (req, res, next) => {
           );
           message = "Invention removed from interests";
         } else {
-          invention.intrestedInventors.push(user._id);
+          invention.intrestedInvestors.push(user._id);
           user.intrests.push(invention._id);
           message = "Invention added to interests";
         }

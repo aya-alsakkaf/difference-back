@@ -26,9 +26,13 @@ const createCategory = async (req, res, next) => {
 
 module.exports = { getCategories, createCategory };
 
-const getOneCategory = async (req, res) => {
-  const category = await Category.findById(req.params.id);
-  res.status(200).json(category);
+const getOneCategory = async (req, res, next) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    res.status(200).json(category);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = { getCategories, createCategory, getOneCategory };
