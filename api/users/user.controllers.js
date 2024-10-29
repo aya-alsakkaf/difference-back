@@ -81,6 +81,16 @@ const getProfile = async (req, res, next) => {
   }
 };
 
+const getProfileById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).populate("inventions");
+    res.status(200).json(user);
+  } catch (error) {
+
+    next(error);
+  }
+};
+
 const updateProfile = async (req, res, next) => {
   try {
     if (req.file) {
@@ -103,4 +113,5 @@ module.exports = {
   getUser,
   getProfile,
   updateProfile,
+  getProfileById,
 };
