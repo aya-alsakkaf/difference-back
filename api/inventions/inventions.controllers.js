@@ -70,8 +70,10 @@ const createInvention = async (req, res, next) => {
     await Category.findByIdAndUpdate(req.body.category, {
       $push: { inventions: newInvention._id },
     });
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: { inventions: newInvention._id },
+    [req.user._id, ...inventorIds].forEach(async (inventorId) => {
+      await User.findByIdAndUpdate(inventorId, {
+        $push: { inventions: newInvention._id },
+      });
     });
     res.status(201).json(newInvention);
   } catch (error) {
