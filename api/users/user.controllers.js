@@ -7,6 +7,7 @@ const createToken = (user) => {
   const payload = {
     _id: user._id,
     email: user.email,
+    role: user.role,
   };
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "31d" });
 };
@@ -85,6 +86,7 @@ const getProfileById = async (req, res, next) => {
     const user = await User.findById(req.params.id).populate("inventions");
     res.status(200).json(user);
   } catch (error) {
+
     next(error);
   }
 };
