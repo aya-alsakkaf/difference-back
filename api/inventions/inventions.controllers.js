@@ -59,13 +59,7 @@ const createInvention = async (req, res, next) => {
       return new mongoose.Types.ObjectId(id.trim());
     });
     req.body.inventors = [req.user._id, ...inventorIds];
-<<<<<<< HEAD
     const inventionData  = {
-=======
-    // const inventors =  [req.user._id, ...req.body.inventors.split(",")]
-    console.log(req.body.inventors);
-    const inventionData = {
->>>>>>> 3edae76a19ddaddc3fdd462748300c4a84d3eaa4
       ...req.body,
       inventors: [req.user._id, ...inventorIds],
     };
@@ -136,7 +130,7 @@ const deleteInvention = async (req, res, next) => {
   try {
     const user = req.user;
     const invention = await Invention.findById(req.params.id);
-    if (invention.inventors.includes(usser._id) || user.role === "admin") {
+    if (invention.inventors.includes(user._id) || user.role === "admin") {
       const deletedInvention = await Invention.findByIdAndDelete(req.params.id);
       res.status(200).json(deletedInvention);
     } else {
