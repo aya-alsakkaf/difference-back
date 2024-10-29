@@ -36,22 +36,38 @@ const getInventionsByUser = async (req, res, next) => {
     next(error);
   }
 };
+const getInventionById = async (req, res, next) => {
+  try {
+    const invention = await Invention.findById(req.params.id)
+      .populate("inventors")
+      .populate("orders");
+    res.status(200).json(invention);
+  } catch (error) {
+    next(error);
+  }
+};
 
 const createInvention = async (req, res, next) => {
   try {
     // req.body.inventors = JSON.parse(req.body.inventors);
-    
-    console.log("inventors", req.body.inventors.split(","))
+
+    console.log("inventors", req.body.inventors.split(","));
     if (req.files && req.files.length > 0) {
       req.body.images = req.files.map((file) => file.path);
     }
-    const inventorIds = req.body.inventors.split(",").map(id =>{ 
-      return new mongoose.Types.ObjectId(id.trim())
+    const inventorIds = req.body.inventors.split(",").map((id) => {
+      return new mongoose.Types.ObjectId(id.trim());
     });
     req.body.inventors = [req.user._id, ...inventorIds];
+<<<<<<< HEAD
     const inventionData  = {
+=======
+    // const inventors =  [req.user._id, ...req.body.inventors.split(",")]
+    console.log(req.body.inventors);
+    const inventionData = {
+>>>>>>> 3edae76a19ddaddc3fdd462748300c4a84d3eaa4
       ...req.body,
-      inventors: [req.user._id, ...inventorIds]
+      inventors: [req.user._id, ...inventorIds],
     };
     console.log(inventionData);
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
@@ -216,4 +232,5 @@ module.exports = {
   getInventionsByUser,
   toggleLikeInvention,
   toggleInterestedInvention,
+  getInventionById,
 };
