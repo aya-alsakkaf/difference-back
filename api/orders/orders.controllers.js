@@ -4,8 +4,8 @@ const Invention = require("../../models/Invention");
 const getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
-      .populate("invention")
-      .populate("investor", "-password");
+      .populate("investor", "-password")
+      .populate("invention", "-description");
     res.status(200).json(orders);
   } catch (error) {
     next(error);
@@ -48,9 +48,10 @@ const createOrder = async (req, res, next) => {
 const updateOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
-    if (req.user._id.equals(order.investor) || req.user.role === "admin") {
+    const invention = await Invention.findById(order.invention);
+    if (req.user._id.equals(order.investor) || req.user.role === "admin" || req.user._id.equals(invention.inventors[0])) {
       const updatedOrder = await Order.findByIdAndUpdate(req.params.id, {
-        role: req.body.role,
+        status: req.body.status,
       });
       res.status(200).json(updatedOrder);
     } else {

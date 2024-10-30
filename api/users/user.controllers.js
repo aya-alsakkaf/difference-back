@@ -35,13 +35,13 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   console.log("dada");
   try {
-    const user = await User.findOne({ email: req.body.email });
-    const token = createToken(user);
+    console.log(req.user);
+    const token = createToken(req.user);
     res.status(200).json({
       token,
       message: "Logged in successfully!",
-      _id: user._id,
-      role: user.role,
+      _id: req.user._id,
+      role: req.user.role,
     });
   } catch (error) {
     next(error);

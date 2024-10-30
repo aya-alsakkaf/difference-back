@@ -27,6 +27,6 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   updateProfile
 );
-router.post("/auth/login", login);
+router.post("/auth/login", passport.authenticate("local", { session: false }), login);
 
 module.exports = router;
