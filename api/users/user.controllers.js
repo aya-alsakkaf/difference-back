@@ -65,6 +65,23 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getInventors = async (req, res, next) => {
+  try {
+    const inventors = await User.find({ role: "inventor" })
+      .select("-password")
+      .populate("inventions");
+
+    if (!inventors.length) {
+      return res.status(200).json({ message: "No inventors found", data: [] });
+    }
+
+    res.status(200).json(inventors);
+  } catch (error) {
+    console.error("Error fetching inventors:", error);
+    next(error);
+  }
+};
+
 const getProfile = async (req, res, next) => {
   try {
     console.log("sajsoahsu");
@@ -86,7 +103,6 @@ const getProfileById = async (req, res, next) => {
     const user = await User.findById(req.params.id).populate("inventions");
     res.status(200).json(user);
   } catch (error) {
-
     next(error);
   }
 };
@@ -96,7 +112,9 @@ const updateProfile = async (req, res, next) => {
     if (req.file) {
       req.body.image = await req.file.path.replace("\\", "/");
     }
-    console.log(req.body);
+    if (req.file) {
+      req.body.cv = await req.file.path.replace("\\", "/");
+    }
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     });
@@ -111,6 +129,7 @@ module.exports = {
   login,
   getUsers,
   getUser,
+  getInventors,
   getProfile,
   updateProfile,
   getProfileById,

@@ -4,6 +4,7 @@ const {
   login,
   getUsers,
   getUser,
+  getInventors,
   getProfile,
   updateProfile,
   getProfileById,
@@ -13,6 +14,7 @@ const passport = require("passport");
 router.get("/users", getUsers);
 router.get("/users/:id", getUser);
 router.get("/users/:id", getProfileById);
+router.get("/inventors", getInventors);
 router.get(
   "/auth/profile",
   passport.authenticate("jwt", { session: false }),

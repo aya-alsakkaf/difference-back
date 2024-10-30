@@ -12,6 +12,7 @@ const UserSchema = new Schema({
   investments: [{ type: Schema.Types.ObjectId, ref: "Order" }],
   liked: [{ type: Schema.Types.ObjectId, ref: "Invention" }],
   intrests: [{ type: Schema.Types.ObjectId, ref: "Invention" }],
+  cv: { type: String },
 });
 
 module.exports = model("User", UserSchema);
