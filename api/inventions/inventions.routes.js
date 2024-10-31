@@ -17,13 +17,18 @@ router.get("/:id", getInvention);
 router.get("/:id", getInventionById);
 router.post(
   "/",
-  upload.array("images", 30),
+  // upload.array("images", 30),
+  upload.fields([
+    { name: "images", maxCount: 30 },
+    { name: "documents", maxCount: 30 },
+  ]),
   passport.authenticate("jwt", { session: false }),
   createInvention
 );
 router.put(
   "/:id",
   upload.array("images", 30),
+  upload.array("documents", 30),
   passport.authenticate("jwt", { session: false }),
   updateInvention
 );
