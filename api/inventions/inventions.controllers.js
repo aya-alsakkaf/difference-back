@@ -7,6 +7,7 @@ const getInventions = async (req, res, next) => {
     const inventions = await Invention.find()
       .populate("inventors")
       .populate("orders");
+ 
     res.status(200).json(inventions);
   } catch (error) {
     next(error);
