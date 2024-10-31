@@ -50,19 +50,23 @@ const getInventionById = async (req, res, next) => {
 const createInvention = async (req, res, next) => {
   try {
     // req.body.inventors = JSON.parse(req.body.inventors);
-    
-    console.log("inventors", req.body.inventors?.split(","));
+    // console.log("FILES", req.files);
+    // console.log("inventors", req.body.inventors?.split(","));
     if (req.files && req.files.length > 0) {
-      req.body.images = req.files.map((file) => file.path);
+      req.body.images = req.files.images.map((file) => file.path);
     }
-    const inventorIds = req.body.inventors?.split(",").map((id) => {
-      return new mongoose.Types.ObjectId(id.trim());
-    }) || [];
+    const inventorIds =
+      req.body.inventors?.split(",").map((id) => {
+        return new mongoose.Types.ObjectId(id.trim());
+      }) || [];
     req.body.inventors = [req.user._id, ...inventorIds];
-    console.log("req.body", req.body)
-    const inventionData  = {
+    // console.log("req.body", req.body);
+    console.log("req.files", req.files);
+    console.log("req.files.documents", req.files.documents);
+    const inventionData = {
       ...req.body,
       inventors: [req.user._id, ...inventorIds],
+      documents: req.files.documents.map((file) => file.path),
     };
     console.log(inventionData);
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
@@ -78,6 +82,7 @@ const createInvention = async (req, res, next) => {
     });
     res.status(201).json(newInvention);
   } catch (error) {
+    console.log("error", error);
     next(error);
   }
 };
@@ -86,33 +91,34 @@ const updateInvention = async (req, res, next) => {
   try {
     const user = req.user;
     const invention = await Invention.findById(req.params.id);
-    
+
     if (!invention) {
       return res.status(404).json({ message: "Invention not found" });
     }
 
     if (invention.inventors.includes(user._id) || user.role === "admin") {
       let updateData = { ...req.body };
-      
-      
+
       // Handle new images if uploaded
       if (req.files && req.files.length > 0) {
-        updateData.images = await req.files.map(file => file.path.replace("\\", "/"));
+        updateData.images = await req.files.map((file) =>
+          file.path.replace("\\", "/")
+        );
       }
-      
+
       // Handle inventors
       // if (req.body.inventors) {
-      //   const inventorIds = req.body.inventors.split(",").map(id => 
+      //   const inventorIds = req.body.inventors.split(",").map(id =>
       //     new mongoose.Types.ObjectId(id.trim())
       //   );
       //   updateData.inventors = [req.user._id, ...inventorIds];
       // }
-      
+
       // Convert cost to number
       if (updateData.cost) {
         updateData.cost = Number(updateData.cost);
       }
-      console.log(updateData)
+      console.log(updateData);
 
       const updatedInvention = await Invention.findByIdAndUpdate(
         req.params.id,
@@ -122,7 +128,9 @@ const updateInvention = async (req, res, next) => {
 
       return res.status(200).json(updatedInvention);
     } else {
-      return res.status(403).json({ message: "You are not authorized to update this invention" });
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to update this invention" });
     }
   } catch (error) {
     next(error);

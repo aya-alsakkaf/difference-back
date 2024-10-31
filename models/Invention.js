@@ -18,6 +18,7 @@ const InventionSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   intrestedInvestors: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  files: [{ type: String }],
 });
 
 module.exports = mongoose.model("Invention", InventionSchema);
