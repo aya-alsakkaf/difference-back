@@ -49,24 +49,25 @@ const getInventionById = async (req, res, next) => {
 
 const createInvention = async (req, res, next) => {
   try {
-    // req.body.inventors = JSON.parse(req.body.inventors);
-    // console.log("FILES", req.files);
-    // console.log("inventors", req.body.inventors?.split(","));
-    if (req.files && req.files.length > 0) {
-      req.body.images = req.files.images.map((file) => file.path);
+    if (req.files) {
+      if (req.files.images && req.files.images.length > 0) {
+        console.log("req.files.images", req.files.images);
+        req.body.images = req.files.images.map((file) => file.path);
+      }
+      if (req.files.documents && req.files.documents.length > 0) {
+        console.log("req.files.documents", req.files.documents);
+        req.body.documents = req.files.documents.map((file) => file.path);
+      }
     }
     const inventorIds =
       req.body.inventors?.split(",").map((id) => {
         return new mongoose.Types.ObjectId(id.trim());
       }) || [];
     req.body.inventors = [req.user._id, ...inventorIds];
-    // console.log("req.body", req.body);
-    console.log("req.files", req.files);
-    console.log("req.files.documents", req.files.documents);
+
     const inventionData = {
       ...req.body,
       inventors: [req.user._id, ...inventorIds],
-      documents: req.files.documents.map((file) => file.path),
     };
     console.log(inventionData);
     // req.body.invertors will be taken from formdata in frontend (check images array for inventions in frontend as reference)
