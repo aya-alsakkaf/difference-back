@@ -54,6 +54,7 @@ const login = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find();
+
     res.status(200).json(users);
   } catch (error) {
     next(error);
@@ -87,8 +88,6 @@ const getInventors = async (req, res, next) => {
 
 const getProfile = async (req, res, next) => {
   try {
-    console.log("sajsoahsu");
-    console.log(req.user);
     const user = await User.findOne({ email: req.user.email })
       .select("-password")
       .populate("inventions")
@@ -112,12 +111,16 @@ const getProfileById = async (req, res, next) => {
 
 const updateProfile = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = req.file.path;
-    }
-    console.log(req.files, "files here");
-    if (req.files && req.files.cv) {
-      req.body.cv = req.files.cv[0].path;
+    // if (req.file) {
+    //   req.body.image = req.file.path;
+    // }
+    if (req.files) {
+      if (req.files.image && req.files.image.length > 0) {
+        req.body.image = await req.files.image[0].path.replace("\\", "/");
+      }
+      if (req.files.cv && req.files.cv.length > 0) {
+        req.body.cv = await req.files.cv[0].path.replace("\\", "/");
+      }
     }
 
     const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {

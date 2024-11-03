@@ -52,12 +52,14 @@ const createInvention = async (req, res, next) => {
   try {
     if (req.files) {
       if (req.files.images && req.files.images.length > 0) {
-        console.log("req.files.images", req.files.images);
-        req.body.images = req.files.images.map((file) => file.path);
+        req.body.images = await req.files.images.map((file) =>
+          file.path.replace("\\", "/")
+        );
       }
       if (req.files.documents && req.files.documents.length > 0) {
-        console.log("req.files.documents", req.files.documents);
-        req.body.documents = req.files.documents.map((file) => file.path);
+        req.body.documents = await req.files.documents.map((file) =>
+          file.path.replace("\\", "/")
+        );
       }
     }
     const inventorIds =
@@ -99,14 +101,21 @@ const updateInvention = async (req, res, next) => {
     }
 
     if (invention.inventors.includes(user._id) || user.role === "admin") {
-      let updateData = { ...req.body };
-
+      
       // Handle new images if uploaded
-      if (req.files && req.files.length > 0) {
-        updateData.images = await req.files.map((file) =>
-          file.path.replace("\\", "/")
-        );
+      if (req.files) {
+        if (req.files.images && req.files.images.length > 0) {
+          req.body.images = await req.files.images.map((file) =>
+            file.path.replace("\\", "/")
+          );
+        }
+        if (req.files.documents && req.files.documents.length > 0) {
+          req.body.documents = await req.files.documents.map((file) =>
+            file.path.replace("\\", "/")
+          );
+        }
       }
+      let updateData = { ...req.body };
 
       // Handle inventors
       // if (req.body.inventors) {
@@ -120,7 +129,6 @@ const updateInvention = async (req, res, next) => {
       if (updateData.cost) {
         updateData.cost = Number(updateData.cost);
       }
-      console.log(updateData);
 
       const updatedInvention = await Invention.findByIdAndUpdate(
         req.params.id,
