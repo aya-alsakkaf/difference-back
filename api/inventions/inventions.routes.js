@@ -9,6 +9,7 @@ const {
   toggleLikeInvention,
   toggleInterestedInvention,
   getInventionById,
+  incrementViews,
 } = require("./inventions.controllers");
 const upload = require("../../middleware/multer");
 const passport = require("passport");
@@ -49,5 +50,5 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   toggleInterestedInvention
 );
-
+router.put("/:id/views", incrementViews);
 module.exports = router;

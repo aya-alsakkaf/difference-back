@@ -7,7 +7,7 @@ const getInventions = async (req, res, next) => {
     const inventions = await Invention.find()
       .populate("inventors")
       .populate("orders");
- 
+
     res.status(200).json(inventions);
   } catch (error) {
     next(error);
@@ -156,6 +156,27 @@ const deleteInvention = async (req, res, next) => {
   }
 };
 
+const incrementViews = async (req, res, next) => {
+  try {
+    console.log(`
+      
+      
+      
+      ======================== TESTING ========================
+      
+      
+      
+      
+      `);
+    const invention = await Invention.findByIdAndUpdate(req.params.id, {
+      $inc: { views: 1 },
+    });
+    res.status(200).json(invention);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const toggleLikeInvention = async (req, res, next) => {
   try {
     const invention = await Invention.findById(req.params.id);
@@ -240,4 +261,5 @@ module.exports = {
   toggleLikeInvention,
   toggleInterestedInvention,
   getInventionById,
+  incrementViews,
 };
