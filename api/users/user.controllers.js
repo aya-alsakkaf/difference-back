@@ -8,6 +8,7 @@ const createToken = (user) => {
     _id: user._id,
     email: user.email,
     role: user.role,
+    firstName: user.firstName,
   };
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "31d" });
 };
@@ -26,6 +27,7 @@ const register = async (req, res, next) => {
       message: "Account created successfully!",
       _id: user._id,
       role: user.role,
+      firstName: user.firstName,
     });
   } catch (error) {
     next(error);
@@ -42,6 +44,7 @@ const login = async (req, res, next) => {
       message: "Logged in successfully!",
       _id: req.user._id,
       role: req.user.role,
+      firstName: req.user.firstName,
     });
   } catch (error) {
     next(error);
