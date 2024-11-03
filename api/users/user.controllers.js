@@ -113,16 +113,20 @@ const getProfileById = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = await req.file.path.replace("\\", "/");
+      req.body.image = req.file.path;
     }
-    if (req.file) {
-      req.body.cv = await req.file.path.replace("\\", "/");
+    console.log(req.files, "files here");
+    if (req.files && req.files.cv) {
+      req.body.cv = req.files.cv[0].path;
     }
-    const user = await User.findByIdAndUpdate(req.user._id, req.body, {
+
+    const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     });
-    res.status(200).json(user);
+
+    res.status(200).json(updatedUser);
   } catch (error) {
+    console.log("error", error);
     next(error);
   }
 };

@@ -23,10 +23,17 @@ router.get(
 router.post("/auth/register", upload.single("image"), register);
 router.put(
   "/auth/profile",
-  upload.single("image"),
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "cv", maxCount: 1 }, // Allow up to 5 CV documents
+  ]),
   passport.authenticate("jwt", { session: false }),
   updateProfile
 );
-router.post("/auth/login", passport.authenticate("local", { session: false }), login);
+router.post(
+  "/auth/login",
+  passport.authenticate("local", { session: false }),
+  login
+);
 
 module.exports = router;
