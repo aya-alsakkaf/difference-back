@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!--container-->
+    <div class="container">
+      <div class="upper-pos">
+        <!--upper buttons-->
+        <h2 class="netflix-red bebas-neue-regular">NETFLIX</h2>
+
+        <div>
+          <select
+            name="English"
+            id="English"
+            class="upper-buttons trans-button"
+          >
+            <option value="English">English</option>
+            <option value="العربية">العربية</option>
+          </select>
+          <button type="button" class="text background-red upper-buttons">
+            Sign In
+          </button>
+        </div>
+      </div>
+      <div class="text mid-pos">
+        <!--Middle text-->
+        <h1 class="h1-margin">Unlimited movies, TV shows, and more</h1>
+        <p class="h1-margin">Watch anywhere. Cancel anytime.</p>
+        <p class="h1-margin">
+          Ready to watch? Enter your email to create or restart your membership.
+        </p>
+        <!--Lower section-->
+        <div class="lower-pos">
+          <input
+            type="text"
+            value="Email address"
+            class="right-push email-size"
+          /><br /><br />
+          <button type="button" class="background-red text get-started">
+            Get Started >
+          </button>
+        </div>
+      </div>
+      <!--lower buttons-->
+    </div>
+    <hr />
+    <!--page2>-->
+    <div class="container2">
+      <div class="container-2p2">
+        <!--text and image container-->
+        <div class="mid-pos2">
+          <!--page 2 left text-->
+          <h1 class="text">Enjoy on your TV</h1>
+          <p class="text">
+            Watch on Smart TVs, Playstation, Xbox,<br />
+            Chromecast, Apple TV, Blu-ray players, and more.
+          </p>
+        </div>
+        <div>
+          <!--page 2 right image-->
+          <img
+            src="https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/tv.png"
+            alt="TV image"
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
