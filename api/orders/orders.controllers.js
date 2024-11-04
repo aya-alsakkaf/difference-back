@@ -49,7 +49,14 @@ const updateOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
     const invention = await Invention.findById(order.invention);
-    if (req.user._id.equals(order.investor) || req.user.role === "admin" || req.user._id.equals(invention.inventors[0])) {
+    const foundInventor = invention.inventors.find((inventor) =>
+      inventor._id.equals(req.user._id)
+    );
+    if (
+      req.user._id.equals(order.investor) ||
+      req.user.role === "admin" ||
+      foundInventor
+    ) {
       const updatedOrder = await Order.findByIdAndUpdate(req.params.id, {
         status: req.body.status,
       });
@@ -58,6 +65,7 @@ const updateOrder = async (req, res, next) => {
       res.status(401).json({ message: "Unauthorized" });
     }
   } catch (error) {
+    console.log("update inventions", error);
     next(error);
   }
 };
