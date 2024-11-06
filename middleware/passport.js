@@ -10,7 +10,7 @@ const localStrategy = new LocalStrategy(
   async (email, password, done) => {
     try {
       const user = await User.findOne({ email });
-      console.log(user);
+      // console.log(user);
       if (!user) return done(null, false, { message: "Email not found" });
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
