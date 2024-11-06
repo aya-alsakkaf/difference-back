@@ -54,8 +54,6 @@ io.on("connection", (socket) => {
   // });
 });
 
-httpServer.listen(3000);
-
-app.listen(process.env.PORT, () => {
+httpServer.listen(process.env.PORT, () => {
   console.log(`The application is running on localhost:${process.env.PORT}`);
 });
